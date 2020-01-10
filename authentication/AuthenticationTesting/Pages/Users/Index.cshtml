@@ -40,6 +40,10 @@
             <td>
                 @{
                     var hashPassword = IndexModel.getHashString(item.Password);
+                    //if admin show passwords
+                    if(Model.username.Equals("admin") && Model.password.Equals("123")){
+                        hashPassword = item.Password;
+                    }
                 }
                 @Html.DisplayFor(modelItem => hashPassword)
             </td>
