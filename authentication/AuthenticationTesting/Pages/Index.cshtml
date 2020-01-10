@@ -1,0 +1,16 @@
+﻿@page
+@model IndexModel;
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center ">
+    <h1 class="display-4">Login</h1>
+        <form method="get" action="Users">
+            <label asp-for="username" class="control-label ">Username</label>
+            <input asp-for="username" type="text" class="form-control col-6 mx-auto mb-3" required/>
+            <label asp-for="password" class="control-label ">Password</label>
+            <input asp-for="password" type="text"class="form-control col-6 mx-auto mb-3" required/>
+            <input type="submit" value="Submit" class="btn btn-primary" />
+        </form>
+</div>
