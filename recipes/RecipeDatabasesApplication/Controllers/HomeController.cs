@@ -20,7 +20,7 @@ namespace RecipeDatabasesApplication.Controllers
         public ActionResult About()
         {
             IQueryable<RecipeGroup> data = from user in db.UserRecipes
-                                           group user by user.Recipe.Name into recipeGroup
+                                           group user by user.Recipes.Name into recipeGroup
                                            select new RecipeGroup()
                                            {
                                                Recipe = recipeGroup.Key,

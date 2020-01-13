@@ -10,6 +10,7 @@ using RecipeDatabasesApplication.DAL;
 using RecipeDatabasesApplication.Models;
 using RecipeDatabasesApplication.ViewModels;
 using PagedList;
+using System.Data.Entity.Infrastructure;
 
 namespace RecipeDatabasesApplication.Controllers
 {
@@ -88,7 +89,7 @@ namespace RecipeDatabasesApplication.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            catch (DataException)
+            catch (RetryLimitExceededException)
             {
                 //Error message
                 ModelState.AddModelError("", "Can't create new User");
@@ -132,7 +133,7 @@ namespace RecipeDatabasesApplication.Controllers
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-                catch (DataException)
+                catch (RetryLimitExceededException)
                 {
                     ModelState.AddModelError("", "Unable to update user data");
                 }
@@ -171,7 +172,7 @@ namespace RecipeDatabasesApplication.Controllers
                 db.Users.Remove(user);
                 db.SaveChanges();
             }
-            catch (DataException)
+            catch (RetryLimitExceededException)
             {
                 return RedirectToAction("Delete", new { id = id, saveChangesError = true });
             }

@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RecipeDatabasesApplication.Models
 {
-    [Table("Reicpes")]
+    [Table("Recipes")]
     public class Recipe
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -18,5 +18,6 @@ namespace RecipeDatabasesApplication.Models
 
 
         public virtual ICollection<UserRecipe> UserRecipes { get; set; }
+        //public virtual ICollection<RecipeIngredient> RecipeIngredients { get; set; }
     }
 }

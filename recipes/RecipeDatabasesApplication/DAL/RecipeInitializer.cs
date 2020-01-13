@@ -9,7 +9,7 @@ namespace RecipeDatabasesApplication.DAL
 {
     public class RecipeInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<RecipeDBContext>
     {
-        protected override void Seed(RecipeDBContext context)
+        /*protected override void Seed(RecipeDBContext context)
         {
             //seed users
             var users = new List<User>
@@ -36,11 +36,11 @@ namespace RecipeDatabasesApplication.DAL
             //seed ingredients
             var ingredients = new List<Ingredient>
             {
-                new Ingredient{Name="Flour"},
-                new Ingredient{Name="Sugar"},
-                new Ingredient{Name="Milk"},
-                new Ingredient{Name="Salt"},
-                new Ingredient{Name="Cheese"},
+                new Ingredient{IngredientID=2001,Name="Flour"},
+                new Ingredient{IngredientID=2002,Name="Sugar"},
+                new Ingredient{IngredientID=2003,Name="Milk"},
+                new Ingredient{IngredientID=2004,Name="Salt"},
+                new Ingredient{IngredientID=2005,Name="Cheese"},
             };
             ingredients.ForEach(i => context.Ingredients.Add(i));
             context.SaveChanges();
@@ -61,7 +61,7 @@ namespace RecipeDatabasesApplication.DAL
             userRecipes.ForEach(u => context.UserRecipes.Add(u));
             context.SaveChanges();
 
-        }
+        }*/
 
     }
 }

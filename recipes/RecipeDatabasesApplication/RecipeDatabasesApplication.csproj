@@ -135,14 +135,19 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="DAL\RecipeDBConfiguration.cs" />
     <Compile Include="DAL\RecipeDBContext.cs" />
+    <Compile Include="DAL\RecipeDBInterceptorLogging.cs" />
+    <Compile Include="DAL\RecipeDBInterceptorTransientErrors.cs" />
     <Compile Include="DAL\RecipeInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202001120417323_InitialCreate.cs" />
-    <Compile Include="Migrations\202001120417323_InitialCreate.designer.cs">
-      <DependentUpon>202001120417323_InitialCreate.cs</DependentUpon>
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Migrations\202001132201387_creation.cs" />
+    <Compile Include="Migrations\202001132201387_creation.designer.cs">
+      <DependentUpon>202001132201387_creation.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Ingredient.cs" />
@@ -212,8 +217,8 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202001120417323_InitialCreate.resx">
-      <DependentUpon>202001120417323_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202001132201387_creation.resx">
+      <DependentUpon>202001132201387_creation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
