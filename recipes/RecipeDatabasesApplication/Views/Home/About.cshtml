@@ -1,0 +1,28 @@
+﻿@model IEnumerable<RecipeDatabasesApplication.ViewModels.RecipeGroup>
+
+@{
+    ViewBag.Title = "Recipe Statistics";
+}
+<h2>@ViewBag.Title.</h2>
+
+<table>
+    <tr>
+        <th>
+            Recipe
+        </th>
+        <th>
+            Users
+        </th>
+    </tr>
+    @foreach(var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Recipe)
+            </td>
+            <td>
+                @item.UserCount
+            </td>
+        </tr>
+    }
+</table>
