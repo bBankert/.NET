@@ -20,7 +20,6 @@
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method
             //  to avoid creating duplicate seed data.
-
             var users = new List<User>
             {
                 new User{Name="Tom",Username="t123",Password="abc"},
@@ -40,7 +39,7 @@
                 new Recipe{RecipeID=1004,Name="Cereal"},
                 new Recipe{RecipeID=1005,Name="Coffee"}
             };
-            recipes.ForEach(r => context.Recipes.AddOrUpdate(a => a.Name,r));
+            recipes.ForEach(r => context.Recipes.AddOrUpdate(a => a.Name, r));
             context.SaveChanges();
             //seed ingredients
             var ingredients = new List<Ingredient>
@@ -52,6 +51,138 @@
                 new Ingredient{IngredientID=2005,Name="Cheese"},
             };
             ingredients.ForEach(i => context.Ingredients.AddOrUpdate(a => a.Name, i));
+            context.SaveChanges();
+            //seed userRecipes *IMPORTANT for seeding many-to-many
+            var userRecipes = new List<UserRecipe>
+            {
+                new UserRecipe
+                {
+                    UserID = users.Single(u => u.Name == "Tom").UserID,
+                    RecipeID = recipes.Single(r => r.Name == "Pizza").RecipeID
+                },
+                new UserRecipe
+                {
+                    UserID = users.Single(u => u.Name == "Tom").UserID,
+                    RecipeID = recipes.Single(r => r.Name == "Turkey").RecipeID
+                },
+                new UserRecipe
+                {
+                    UserID = users.Single(u => u.Name == "Tom").UserID,
+                    RecipeID = recipes.Single(r => r.Name == "Cereal").RecipeID
+                },
+                new UserRecipe
+                {
+                    UserID = users.Single(u => u.Name == "Shanon").UserID,
+                    RecipeID = recipes.Single(r => r.Name == "Coffee").RecipeID
+                },
+                new UserRecipe
+                {
+                    UserID = users.Single(u => u.Name == "Janine").UserID,
+                    RecipeID = recipes.Single(r => r.Name == "Hot Dog").RecipeID
+                },
+                new UserRecipe
+                {
+                    UserID = users.Single(u => u.Name == "Janine").UserID,
+                    RecipeID = recipes.Single(r => r.Name == "Pizza").RecipeID
+                },
+            };
+            foreach (UserRecipe ur in userRecipes)
+            {
+                var userRecipeInDatabase = context.UserRecipes.Where(
+                    a =>
+                        a.RecipeID == ur.RecipeID &&
+                        a.UserID == ur.UserID).SingleOrDefault();
+                if (userRecipeInDatabase == null)
+                {
+                    context.UserRecipes.Add(ur);
+                }
+            }
+            context.SaveChanges();
+
+            var recipeIngredients = new List<RecipeIngredient>
+            {
+                //Pizza
+                new RecipeIngredient
+                {
+                    RecipeID = recipes.Single(r => r.Name == "Pizza").RecipeID,
+                    IngredientID = ingredients.Single(i => i.Name == "Flour").IngredientID
+                },
+                new RecipeIngredient
+                {
+                    RecipeID = recipes.Single(r => r.Name == "Pizza").RecipeID,
+                    IngredientID = ingredients.Single(i => i.Name == "Sugar").IngredientID
+                },
+                new RecipeIngredient
+                {
+                    RecipeID = recipes.Single(r => r.Name == "Pizza").RecipeID,
+                    IngredientID = ingredients.Single(i => i.Name == "Milk").IngredientID
+                },
+                new RecipeIngredient
+                {
+                    RecipeID = recipes.Single(r => r.Name == "Pizza").RecipeID,
+                    IngredientID = ingredients.Single(i => i.Name == "Salt").IngredientID
+                },
+                new RecipeIngredient
+                {
+                    RecipeID = recipes.Single(r => r.Name == "Pizza").RecipeID,
+                    IngredientID = ingredients.Single(i => i.Name == "Cheese").IngredientID
+                },
+                //Turkey
+                new RecipeIngredient
+                {
+                    RecipeID = recipes.Single(r => r.Name == "Turkey").RecipeID,
+                    IngredientID = ingredients.Single(i => i.Name == "Salt").IngredientID
+                },
+                //Hot Dog
+                new RecipeIngredient
+                {
+                    RecipeID = recipes.Single(r => r.Name == "Hot Dog").RecipeID,
+                    IngredientID = ingredients.Single(i => i.Name == "Salt").IngredientID
+                },
+                //Cereal
+                new RecipeIngredient
+                {
+                    RecipeID = recipes.Single(r => r.Name == "Cereal").RecipeID,
+                    IngredientID = ingredients.Single(i => i.Name == "Flour").IngredientID
+                },
+                new RecipeIngredient
+                {
+                    RecipeID = recipes.Single(r => r.Name == "Cereal").RecipeID,
+                    IngredientID = ingredients.Single(i => i.Name == "Sugar").IngredientID
+                },
+                new RecipeIngredient
+                {
+                    RecipeID = recipes.Single(r => r.Name == "Cereal").RecipeID,
+                    IngredientID = ingredients.Single(i => i.Name == "Milk").IngredientID
+                },
+                new RecipeIngredient
+                {
+                    RecipeID = recipes.Single(r => r.Name == "Cereal").RecipeID,
+                    IngredientID = ingredients.Single(i => i.Name == "Salt").IngredientID
+                },
+                //Coffee
+                new RecipeIngredient
+                {
+                    RecipeID = recipes.Single(r => r.Name == "Coffee").RecipeID,
+                    IngredientID = ingredients.Single(i => i.Name == "Sugar").IngredientID
+                },
+                new RecipeIngredient
+                {
+                    RecipeID = recipes.Single(r => r.Name == "Coffee").RecipeID,
+                    IngredientID = ingredients.Single(i => i.Name == "Milk").IngredientID
+                },
+            };
+            foreach (RecipeIngredient ri in recipeIngredients)
+            {
+                var recipeIngredientInDatabase = context.RecipeIngredients.Where(
+                    a =>
+                        a.RecipeID == ri.RecipeID &&
+                        a.IngredientID == ri.IngredientID).SingleOrDefault();
+                if (recipeIngredientInDatabase == null)
+                {
+                    context.RecipeIngredients.Add(ri);
+                }
+            }
             context.SaveChanges();
         }
     }

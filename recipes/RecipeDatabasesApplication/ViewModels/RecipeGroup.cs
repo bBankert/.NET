@@ -12,5 +12,7 @@ namespace RecipeDatabasesApplication.ViewModels
 
         [Display(Name ="Number of Users")]
         public int UserCount { get; set; }
+        /*[Display(Name ="Number of Ingredients")]
+        public int IngredientCount { get; set; }*/
     }
 }

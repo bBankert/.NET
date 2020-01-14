@@ -18,6 +18,6 @@ namespace RecipeDatabasesApplication.Models
 
 
         public virtual ICollection<UserRecipe> UserRecipes { get; set; }
-        //public virtual ICollection<RecipeIngredient> RecipeIngredients { get; set; }
+        public virtual ICollection<RecipeIngredient> RecipeIngredients { get; set; }
     }
 }

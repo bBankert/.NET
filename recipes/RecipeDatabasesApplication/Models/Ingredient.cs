@@ -16,6 +16,6 @@ namespace RecipeDatabasesApplication.Models
         [Required, MinLength(1)]
         public string Name { get; set; }
 
-        //public virtual ICollection<RecipeIngredient> RecipeIngredients { get; set; }
+        public virtual ICollection<RecipeIngredient> RecipeIngredients { get; set; }
     }
 }
