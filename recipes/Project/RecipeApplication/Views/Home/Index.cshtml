@@ -1,0 +1,39 @@
+﻿@Styles.Render("~/Content/css")
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+
+}
+
+<h1>Welcome to the Recipe Book</h1>
+
+<h2>Please login</h2>
+<hr />
+
+
+
+@using (Html.BeginForm())
+{
+    <p>
+        @Html.Label("username", "Username: ")
+        @Html.TextBox("username", null, new { type = "text", required = "required" })
+        <br />
+        @if (ViewBag.ErrorMessage != null && ViewBag.ErrorType == "Username")
+        {
+            <p class="error">@ViewBag.ErrorMessage</p>
+            <br />
+        }
+        @Html.Label("password", "Password: ")
+        @Html.TextBox("password", null, new { type = "password", required = "required" })
+        <br />
+        @if (ViewBag.ErrorMessage != null && ViewBag.ErrorType == "Password")
+        {
+            <p class="error">@ViewBag.ErrorMessage</p>
+            <br />
+        }
+        <input type="submit" value="Login" />
+    </p>
+}
+
+@Html.ActionLink("Create Account", "Create", "Users")
+

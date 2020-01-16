@@ -1,0 +1,22 @@
+﻿@model IEnumerable<RecipeApplication.ViewModels.RecipeGroup>
+
+@{
+    ViewBag.Title = "Userpage";
+}
+
+<h2>@ViewBag.NameOfUser's receipes</h2>
+
+<table class="table">
+    <tr>
+        Recipe Name
+    </tr>
+    @foreach(var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RecipeName)
+        </td>
+    </tr>
+    }
+</table>
+
