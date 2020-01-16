@@ -8,5 +8,7 @@ namespace RecipeApplication.ViewModels
     public class RecipeGroup
     {
         public string RecipeName { get; set; }
+
+        public int RecipeId { get; set; }
     }
 }

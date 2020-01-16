@@ -1,0 +1,24 @@
+﻿@model IEnumerable<RecipeApplication.ViewModels.IngredientGroup>
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>@ViewBag.Recipe</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.IngredientName)
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.IngredientName)</td>
+        </tr>
+    }
+</table>
+<p>
+    @Html.ActionLink("Back to Recipes", "Index","Users", new { username = ViewBag.Username},null)
+</p>

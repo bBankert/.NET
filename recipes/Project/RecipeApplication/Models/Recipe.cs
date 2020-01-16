@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web.Mvc;
 
 namespace RecipeApplication.Models
 {
@@ -12,7 +13,7 @@ namespace RecipeApplication.Models
     {
         public int RecipeId { get; set; }
 
-        [Required,MinLength(1),Display(Name ="Name")]
+        [Required,MinLength(1),Display(Name ="Name"), Remote("RecipeExists", "Recipes", ErrorMessage = "Recipe already created")]
         public string RecipeName { get; set; }
 
         public virtual ICollection<UserRecipe> UserRecipes { get; set; }

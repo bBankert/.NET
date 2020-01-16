@@ -4,7 +4,7 @@
     ViewBag.Title = "Userpage";
 }
 
-<h2>@ViewBag.NameOfUser's receipes</h2>
+<h2>@ViewBag.NameOfUser's recipes</h2>
 
 <table class="table">
     <tr>
@@ -16,7 +16,13 @@
         <td>
             @Html.DisplayFor(modelItem => item.RecipeName)
         </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", "Recipes", new { id = item.RecipeId},null) |
+            @Html.ActionLink("Details", "Details", "Recipes", new { id = item.RecipeId ,username = ViewBag.Username },null) |
+            @Html.ActionLink("Delete", "Delete", "Recipes", new { id = item.RecipeId,username = ViewBag.Username },null)
+        </td>
     </tr>
+    
     }
 </table>
 

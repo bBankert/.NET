@@ -13,6 +13,7 @@ using RecipeApplication.ViewModels;
 
 namespace RecipeApplication.Controllers
 {
+    
     public class UsersController : Controller
     {
         private RecipeBookContext db = new RecipeBookContext();
@@ -24,16 +25,20 @@ namespace RecipeApplication.Controllers
         }
 
         // GET: Users
-        [Route(Name ="/Users/Recipe/{username}")]
+        
+        
         public ActionResult Index(string username)
         {
-            if(string.IsNullOrEmpty(username))
+            //System.Diagnostics.Debug.WriteLine(user.Name);
+            if (username == null)
             {
                 return RedirectToAction("Index", "Home");
             }
-            var users = from usr in db.Users select usr;
-            var loggedInUser = users.Where(u => u.Username.Equals(username)).Single();
+
+            var loggedInUser = db.Users.Where(u => u.Username.Equals(username)).Single();
+
             ViewBag.NameOfUser = loggedInUser.Name;
+            ViewBag.UserName = loggedInUser.Username;
 
             IQueryable<RecipeGroup> recipes =
                 from user in db.Users
@@ -42,7 +47,8 @@ namespace RecipeApplication.Controllers
                 where loggedInUser.UserId == user.UserId
                 select new RecipeGroup()
                 {
-                    RecipeName = recipe.RecipeName
+                    RecipeName = recipe.RecipeName,
+                    RecipeId = recipe.RecipeId
                 };
                 
             

@@ -18,10 +18,10 @@ namespace RecipeApplication
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
-            routes.MapRoute(
-                name: "RecipePage",
-                url: "Users/Recipe/{username}",
-                new {controller = "Users",action="Index",username=UrlParameter.Optional});
+            /*routes.MapRoute(
+                name: "Recipes",
+                url: "Users/{username}",
+                new {controller = "Users",action="Index",username=UrlParameter.Optional});*/
         }
     }
 }

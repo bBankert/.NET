@@ -33,8 +33,8 @@ namespace RecipeApplication.Controllers
                     }
                     else
                     {
-                        
-                       // System.Diagnostics.Debug.WriteLine(usr.Name);
+                       
+                        //System.Diagnostics.Debug.WriteLine(user.Name);
                         //login successful
                         return RedirectToAction("Index", "Users",new { username = username});
                     }
