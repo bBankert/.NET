@@ -22,7 +22,11 @@
             @Html.ActionLink("Delete", "Delete", "Recipes", new { id = item.RecipeId,username = ViewBag.Username },null)
         </td>
     </tr>
-    
     }
+    <tr>
+        <td>
+            @Html.ActionLink("Create new Recipe", "Create", "Recipes", new { username = ViewBag.Username }, null)
+        </td>
+    </tr>
 </table>
 

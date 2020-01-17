@@ -6,6 +6,7 @@
     <title>@ViewBag.Title - Recipe Book</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -22,6 +23,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Edit my Info", "Edit", "Users",new { username = ViewBag.Username },null)</li>
                     <li>@Html.ActionLink("Logout", "Index", "Home")</li>
                 </ul>
             </div>

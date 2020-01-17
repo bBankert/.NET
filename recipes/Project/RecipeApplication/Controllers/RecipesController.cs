@@ -23,11 +23,6 @@ namespace RecipeApplication.Controllers
         }
 
 
-        // GET: Recipes
-        public ActionResult Index()
-        {
-            return View(db.Recipes.ToList());
-        }
 
         // GET: Recipes/Details/5
         public ActionResult Details(int? id, string username)
@@ -60,8 +55,9 @@ namespace RecipeApplication.Controllers
         }
 
         // GET: Recipes/Create
-        public ActionResult Create()
+        public ActionResult Create(string username)
         {
+            ViewBag.Username = username;
             return View();
         }
 
@@ -72,11 +68,30 @@ namespace RecipeApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "RecipeId,RecipeName")] Recipe recipe)
         {
+            string user = Request.QueryString["username"];
             if (ModelState.IsValid)
             {
-                db.Recipes.Add(recipe);
+                int userId = db.Users.Where(u => u.Username.Equals(user)).Single().UserId;
+                
+               
+                bool recipeExists = db.Recipes.Where(r => r.RecipeName.Equals(recipe.RecipeName)).Count() == 1 ? true : false;
+                if (!recipeExists)
+                {
+                    //System.Diagnostics.Debug.WriteLine("Doesn't exist");
+                    db.Recipes.Add(recipe);
+                    db.SaveChanges();
+                }
+
+                UserRecipe userRecipe = new UserRecipe()
+                {
+                    UserId = db.Users.Single(u => u.Username.Equals(user)).UserId,
+                    RecipeId = db.Recipes.Single(r => r.RecipeName.Equals(recipe.RecipeName)).RecipeId
+                };
+
+                db.UserRecipes.Add(userRecipe);
+
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Users", new { username = user });
             }
 
             return View(recipe);

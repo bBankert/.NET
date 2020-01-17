@@ -15,30 +15,16 @@ namespace RecipeApplication.Controllers
     {
         private RecipeBookContext db = new RecipeBookContext();
 
-        // GET: Ingredients
-        public ActionResult Index()
+        public JsonResult IngredientExists(string ingredient)
         {
-            return View(db.Ingredients.ToList());
-        }
-
-        // GET: Ingredients/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Ingredient ingredient = db.Ingredients.Find(id);
-            if (ingredient == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ingredient);
+            return Json(!db.Ingredients.Any(u => u.IngredientName == ingredient), JsonRequestBehavior.AllowGet);
         }
 
         // GET: Ingredients/Create
-        public ActionResult Create()
+        public ActionResult Create(string recipeName,string username)
         {
+            //ViewBag.RecipeId = db.Recipes.Where(r => r.RecipeName.Equals(recipeName)).Single().RecipeId;
+
             return View();
         }
 
@@ -49,11 +35,26 @@ namespace RecipeApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "IngredientId,IngredientName")] Ingredient ingredient)
         {
+            string recipe = Request.QueryString["recipeName"];
+            //add recipeIngredient link for association table
+            int recipeId = db.Recipes.Where(r => r.RecipeName.Equals(recipe)).Single().RecipeId;
             if (ModelState.IsValid)
             {
-                db.Ingredients.Add(ingredient);
+                bool ingredientExists = db.Ingredients.Where(i => i.IngredientName.Equals(ingredient.IngredientName)).Count() == 1 ? true : false;
+                RecipeIngredient recipeIngredient = new RecipeIngredient()
+                {
+                    RecipeId = recipeId,
+                    IngredientId = ingredient.IngredientId
+                };
+                if (!ingredientExists)
+                {
+                    db.Ingredients.Add(ingredient);
+                    
+                }
+                db.RecipeIngredients.Add(recipeIngredient);
+
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Users",new { username = Request.QueryString["username"] });
             }
 
             return View(ingredient);

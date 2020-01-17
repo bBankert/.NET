@@ -17,6 +17,7 @@ namespace RecipeApplication.Controllers
     public class UsersController : Controller
     {
         private RecipeBookContext db = new RecipeBookContext();
+       
 
         //check for unique username
         public JsonResult UserExists(string username)
@@ -38,6 +39,7 @@ namespace RecipeApplication.Controllers
             var loggedInUser = db.Users.Where(u => u.Username.Equals(username)).Single();
 
             ViewBag.NameOfUser = loggedInUser.Name;
+            
             ViewBag.UserName = loggedInUser.Username;
 
             IQueryable<RecipeGroup> recipes =
@@ -98,12 +100,15 @@ namespace RecipeApplication.Controllers
         }
 
         // GET: Users/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(string username)
         {
-            if (id == null)
+            ViewBag.Username = username;
+            if (string.IsNullOrEmpty(username))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index", "Users", new { username = username });
             }
+            int id = db.Users.Where(u => u.Username.Equals(username)).Single().UserId;
+            
             User user = db.Users.Find(id);
             if (user == null)
             {
@@ -119,11 +124,12 @@ namespace RecipeApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "UserId,Name,Age,Gender,Username,Password")] User user)
         {
+            
             if (ModelState.IsValid)
             {
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Users",new { username = user.Username });
             }
             return View(user);
         }

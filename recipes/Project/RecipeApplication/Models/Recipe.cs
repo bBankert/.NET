@@ -13,7 +13,7 @@ namespace RecipeApplication.Models
     {
         public int RecipeId { get; set; }
 
-        [Required,MinLength(1),Display(Name ="Name"), Remote("RecipeExists", "Recipes", ErrorMessage = "Recipe already created")]
+        [Required,MinLength(1),Display(Name ="Name")]
         public string RecipeName { get; set; }
 
         public virtual ICollection<UserRecipe> UserRecipes { get; set; }

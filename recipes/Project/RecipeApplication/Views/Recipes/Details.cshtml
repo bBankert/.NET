@@ -18,6 +18,9 @@
             <td>@Html.DisplayFor(modelItem => item.IngredientName)</td>
         </tr>
     }
+    <tr>
+        @Html.ActionLink("Add an ingredient","Create","Ingredients",new { recipeName = ViewBag.Recipe,username = ViewBag.Username},null)
+    </tr>
 </table>
 <p>
     @Html.ActionLink("Back to Recipes", "Index","Users", new { username = ViewBag.Username},null)
