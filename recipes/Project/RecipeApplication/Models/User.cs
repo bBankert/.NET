@@ -16,7 +16,7 @@ namespace RecipeApplication.Models
 
         [Required,Display(Name="Name"),MinLength(1)]
         public string Name { get; set; }
-        [Required,Range(1,125)]
+        [Required,Range(0,125)]
         public int Age { get; set; }
 
         [Required]

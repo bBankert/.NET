@@ -12,5 +12,7 @@ namespace RecipeApplication.ViewModels
         
         public string IngredientName { get; set; }
         public int IngredientId { get; set; }
+
+        public decimal IngredientCost { get; set; }
     }
 }

@@ -23,7 +23,10 @@ namespace RecipeApplication.Controllers
         // GET: Ingredients/Create
         public ActionResult Create(string recipeName,string username)
         {
-            //ViewBag.RecipeId = db.Recipes.Where(r => r.RecipeName.Equals(recipeName)).Single().RecipeId;
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
             return View();
         }
@@ -33,7 +36,7 @@ namespace RecipeApplication.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IngredientId,IngredientName")] Ingredient ingredient)
+        public ActionResult Create([Bind(Include = "IngredientId,IngredientName,IngredientCost")] Ingredient ingredient)
         {
             string recipe = Request.QueryString["recipeName"];
             //add recipeIngredient link for association table
@@ -41,20 +44,22 @@ namespace RecipeApplication.Controllers
             if (ModelState.IsValid)
             {
                 bool ingredientExists = db.Ingredients.Where(i => i.IngredientName.Equals(ingredient.IngredientName)).Count() == 1 ? true : false;
-                RecipeIngredient recipeIngredient = new RecipeIngredient()
-                {
-                    RecipeId = recipeId,
-                    IngredientId = ingredient.IngredientId
-                };
+                
                 if (!ingredientExists)
                 {
                     db.Ingredients.Add(ingredient);
-                    
+                    db.SaveChanges();
                 }
+                RecipeIngredient recipeIngredient = new RecipeIngredient()
+                {
+                    RecipeId = db.Recipes.Single(r => r.RecipeName.Equals(recipe)).RecipeId,
+                    IngredientId = db.Ingredients.Single(r => r.IngredientName.Equals(ingredient.IngredientName)).IngredientId
+                };
+
                 db.RecipeIngredients.Add(recipeIngredient);
 
                 db.SaveChanges();
-                return RedirectToAction("Index","Users",new { username = Request.QueryString["username"] });
+                return RedirectToAction("Details","Recipes",new {id = recipeId, username = Request.QueryString["username"] });
             }
 
             return View(ingredient);
@@ -80,7 +85,7 @@ namespace RecipeApplication.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IngredientId,IngredientName")] Ingredient ingredient)
+        public ActionResult Edit([Bind(Include = "IngredientId,IngredientName,IngredientCost")] Ingredient ingredient)
         {
             if (ModelState.IsValid)
             {
@@ -92,7 +97,7 @@ namespace RecipeApplication.Controllers
         }
 
         // GET: Ingredients/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? id,string username,string recipeName)
         {
             if (id == null)
             {
@@ -111,10 +116,22 @@ namespace RecipeApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Ingredient ingredient = db.Ingredients.Find(id);
-            db.Ingredients.Remove(ingredient);
+            string recipe = Request.QueryString["recipeName"];
+
+            int recipeId = db.Recipes.Where(r => r.RecipeName.Equals(recipe)).Single().RecipeId;
+            int linkCount = db.RecipeIngredients.Where(ri => ri.IngredientId.Equals(id)).Count();
+            System.Diagnostics.Debug.WriteLine(linkCount);
+            RecipeIngredient recipeIngredient = db.RecipeIngredients.Single(ri => ri.IngredientId.Equals(id) && ri.RecipeId.Equals(recipeId));
+            if (linkCount == 1)
+            {
+                Ingredient ingredient = db.Ingredients.Find(id);
+                db.Ingredients.Remove(ingredient);
+            }
+            db.RecipeIngredients.Remove(recipeIngredient);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            string username = Request.QueryString["username"];
+
+            return RedirectToAction("Details", "Recipes", new { id = recipeId, username = username });
         }
 
         protected override void Dispose(bool disposing)

@@ -10,11 +10,17 @@
     <tr>
         Recipe Name
     </tr>
+    <tr>
+        Recipe Cost
+    </tr>
     @foreach(var item in Model)
     {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.RecipeName)
+        </td>
+        <td>
+           $ @Html.DisplayFor(modelItem => item.RecipeCost)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", "Recipes", new { id = item.RecipeId},null) |

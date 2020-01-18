@@ -42,7 +42,8 @@ namespace RecipeApplication.Controllers
             
             ViewBag.UserName = loggedInUser.Username;
 
-            IQueryable<RecipeGroup> recipes =
+
+            IQueryable < RecipeGroup > recipes =
                 from user in db.Users
                 join userRecipe in db.UserRecipes on user.UserId equals userRecipe.UserId
                 join recipe in db.Recipes on userRecipe.RecipeId equals recipe.RecipeId
@@ -50,15 +51,45 @@ namespace RecipeApplication.Controllers
                 select new RecipeGroup()
                 {
                     RecipeName = recipe.RecipeName,
-                    RecipeId = recipe.RecipeId
+                    RecipeId = recipe.RecipeId,
+                    
                 };
+
+            IList<RecipeGroup> finalRecipes = new List<RecipeGroup>();
                 
-            
+            foreach(var recipe in recipes)
+            {
+                var ingredients =
+                    from r in db.Recipes
+                    join ri in db.RecipeIngredients on r.RecipeId equals ri.RecipeId
+                    join i in db.Ingredients on ri.IngredientId equals i.IngredientId
+                    where recipe.RecipeId == r.RecipeId
+                    select i.IngredientCost;
+                decimal cost;
+                try
+                {
+                    cost = ingredients.Sum();
+                }
+                catch (InvalidOperationException)
+                {
+                    System.Diagnostics.Debug.WriteLine(recipe.RecipeName);
+                    cost = 0.00M;
+                }
+                
+                finalRecipes.Add(new RecipeGroup
+                {
+                    RecipeName = recipe.RecipeName,
+                    RecipeId = recipe.RecipeId,
+                    RecipeCost = cost
+                });
+                
+                //System.Diagnostics.Debug.WriteLine(cost);
+            }
 
-           
 
 
-            return View(recipes.ToList());
+            return View(finalRecipes.ToList());
+            //return View(recipes.ToList());
         }
 
         // GET: Users/Details/5

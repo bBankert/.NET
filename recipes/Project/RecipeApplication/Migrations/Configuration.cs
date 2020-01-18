@@ -45,11 +45,11 @@
             //seed ingredients
             var ingredients = new List<Ingredient>
             {
-                new Ingredient{IngredientName="Flour"},
-                new Ingredient{IngredientName="Sugar"},
-                new Ingredient{IngredientName="Milk"},
-                new Ingredient{IngredientName="Salt"},
-                new Ingredient{IngredientName="Cheese"},
+                new Ingredient{IngredientName="Flour",IngredientCost=3.50M},
+                new Ingredient{IngredientName="Sugar",IngredientCost=1.50M},
+                new Ingredient{IngredientName="Milk",IngredientCost=4.75M},
+                new Ingredient{IngredientName="Salt",IngredientCost=1.25M},
+                new Ingredient{IngredientName="Cheese",IngredientCost=2.45M},
             };
             ingredients.ForEach(i => context.Ingredients.AddOrUpdate(a => a.IngredientName, i));
             context.SaveChanges();

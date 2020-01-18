@@ -16,6 +16,10 @@ namespace RecipeApplication.Models
 
         [Required,MinLength(1),Display(Name ="Ingredient Name")]
         public string IngredientName { get; set; }
+
+        [Required,Display(Name ="Cost of Ingredient"),Range(0.00,Double.PositiveInfinity)]
+        public decimal IngredientCost { get; set; }
+
         public virtual ICollection<RecipeIngredient> RecipeIngredients { get; set; }
 
     }

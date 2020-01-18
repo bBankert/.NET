@@ -47,7 +47,8 @@ namespace RecipeApplication.Controllers
                 select new IngredientGroup()
                 {
                     IngredientId = ingredient.IngredientId,
-                    IngredientName = ingredient.IngredientName
+                    IngredientName = ingredient.IngredientName,
+                    IngredientCost = ingredient.IngredientCost
                 };
 
 
