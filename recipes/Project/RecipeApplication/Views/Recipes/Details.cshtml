@@ -25,16 +25,16 @@
                $ @Html.DisplayFor(modelItem  => item.IngredientCost)
             </td>
             <td>
-                @Html.ActionLink("Delete Ingredient","Delete","Ingredients",new { id = item.IngredientId,username = ViewBag.Username,recipeName = ViewBag.Recipe} ,null) |
-                @Html.ActionLink("Edit Ingredient","Edit","Ingredients",new { id = item.IngredientId ,username = ViewBag.Username},null)
+                @Html.ActionLink("Delete Ingredient","Delete","Ingredients",new { id = item.IngredientId} ,null) |
+                @Html.ActionLink("Edit Ingredient","Edit","Ingredients",new { id = item.IngredientId },null)
             </td>
         </tr>
         
     }
     <tr>
-        @Html.ActionLink("Add an ingredient","Create","Ingredients",new { recipeName = ViewBag.Recipe,username = ViewBag.Username},null)
+        @Html.ActionLink("Add an ingredient","Create","Ingredients")
     </tr>
 </table>
 <p>
-    @Html.ActionLink("Back to Recipes", "Index","Users", new { username = ViewBag.Username},null)
+    @Html.ActionLink("Back to Recipes", "Index","Users")
 </p>

@@ -21,9 +21,11 @@ namespace RecipeApplication.Controllers
         }
 
         // GET: Ingredients/Create
-        public ActionResult Create(string recipeName,string username)
+        public ActionResult Create()
         {
-            if (string.IsNullOrEmpty(username))
+            string recipeName = this.Session["RecipeName"] as string;
+            string username = this.Session["Username"] as string;
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(recipeName))
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -38,7 +40,7 @@ namespace RecipeApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "IngredientId,IngredientName,IngredientCost")] Ingredient ingredient)
         {
-            string recipe = Request.QueryString["recipeName"];
+            string recipe = this.Session["RecipeName"] as string;
             //add recipeIngredient link for association table
             int recipeId = db.Recipes.Where(r => r.RecipeName.Equals(recipe)).Single().RecipeId;
             if (ModelState.IsValid)
@@ -59,7 +61,7 @@ namespace RecipeApplication.Controllers
                 db.RecipeIngredients.Add(recipeIngredient);
 
                 db.SaveChanges();
-                return RedirectToAction("Details","Recipes",new {id = recipeId, username = Request.QueryString["username"] });
+                return RedirectToAction("Details","Recipes",new {id = recipeId});
             }
 
             return View(ingredient);
@@ -116,7 +118,7 @@ namespace RecipeApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            string recipe = Request.QueryString["recipeName"];
+            string recipe = this.Session["RecipeName"] as string;
 
             int recipeId = db.Recipes.Where(r => r.RecipeName.Equals(recipe)).Single().RecipeId;
             int linkCount = db.RecipeIngredients.Where(ri => ri.IngredientId.Equals(id)).Count();
@@ -129,9 +131,9 @@ namespace RecipeApplication.Controllers
             }
             db.RecipeIngredients.Remove(recipeIngredient);
             db.SaveChanges();
-            string username = Request.QueryString["username"];
+            string username = this.Session["Username"] as string;
 
-            return RedirectToAction("Details", "Recipes", new { id = recipeId, username = username });
+            return RedirectToAction("Details", "Recipes", new { id = recipeId});
         }
 
         protected override void Dispose(bool disposing)

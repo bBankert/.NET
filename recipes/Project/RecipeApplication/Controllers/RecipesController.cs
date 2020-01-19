@@ -25,15 +25,18 @@ namespace RecipeApplication.Controllers
 
 
         // GET: Recipes/Details/5
-        public ActionResult Details(int? id, string username)
+        public ActionResult Details(int? id)
         {
+            string username = this.Session["Username"] as string;
             if (id == null)
             {
                 return RedirectToAction("Index", "Home");
             }
             Recipe recipe = db.Recipes.Find(id);
-            ViewBag.Username = username;
+            this.Session["RecipeName"] = recipe.RecipeName;
+
             ViewBag.Recipe = recipe.RecipeName;
+
             if (recipe == null)
             {
                 return HttpNotFound();
@@ -56,9 +59,10 @@ namespace RecipeApplication.Controllers
         }
 
         // GET: Recipes/Create
-        public ActionResult Create(string username)
+        public ActionResult Create()
         {
-            ViewBag.Username = username;
+            string username = this.Session["Username"] as string;
+            
             return View();
         }
 
@@ -69,7 +73,7 @@ namespace RecipeApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "RecipeId,RecipeName")] Recipe recipe)
         {
-            string user = Request.QueryString["username"];
+            string user = this.Session["Username"] as string;
             if (ModelState.IsValid)
             {
                 int userId = db.Users.Where(u => u.Username.Equals(user)).Single().UserId;
@@ -92,7 +96,7 @@ namespace RecipeApplication.Controllers
                 db.UserRecipes.Add(userRecipe);
 
                 db.SaveChanges();
-                return RedirectToAction("Index","Users", new { username = user });
+                return RedirectToAction("Index","Users");
             }
 
             return View(recipe);
@@ -130,9 +134,10 @@ namespace RecipeApplication.Controllers
         }
 
         // GET: Recipes/Delete/5
-        public ActionResult Delete(int? id,string username)
+        public ActionResult Delete(int? id)
         {
-            ViewBag.Username = username;
+            string username = this.Session["Username"] as string;
+            
             if (id == null)
             {
                 //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -151,7 +156,7 @@ namespace RecipeApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            string username = Request.QueryString["username"];
+            string username = this.Session["Username"] as string;
             Recipe recipe = db.Recipes.Find(id);
             
             //check associations and remove the link from the user to the recipe
@@ -167,7 +172,7 @@ namespace RecipeApplication.Controllers
             }
             db.UserRecipes.Remove(userRecipe);
             db.SaveChanges();
-            return RedirectToAction("Index","Users",new { username = username });
+            return RedirectToAction("Index","Users");
         }
 
         protected override void Dispose(bool disposing)

@@ -9,7 +9,7 @@ using RecipeApplication.Controllers;
 
 namespace RecipeApplication.Models
 {
-    [Table("Users")]
+    [Table("Users"),Serializable]
     public class User
     {
         public int UserId { get; set; }

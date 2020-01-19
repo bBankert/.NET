@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using RecipeApplication.Data;
 using RecipeApplication.Models;
+using Microsoft.AspNetCore.Session;
 
 namespace RecipeApplication.Controllers
 {
@@ -33,10 +34,13 @@ namespace RecipeApplication.Controllers
                     }
                     else
                     {
-                       
+
                         //System.Diagnostics.Debug.WriteLine(user.Name);
                         //login successful
-                        return RedirectToAction("Index", "Users",new { username = username});
+                        //set session data
+                        Session["Username"] = username;
+                        return RedirectToAction("Index", "Users");
+                        //return RedirectToAction("Index", "Users",new { username = username});
                     }
                 }
             }

@@ -27,20 +27,19 @@ namespace RecipeApplication.Controllers
 
         // GET: Users
         
-        
-        public ActionResult Index(string username)
+        public ActionResult Index()
         {
+            string username = this.Session["Username"] as string;
             //System.Diagnostics.Debug.WriteLine(user.Name);
             if (username == null)
             {
                 return RedirectToAction("Index", "Home");
             }
-
-            var loggedInUser = db.Users.Where(u => u.Username.Equals(username)).Single();
+            var loggedInUser = db.Users.Single(u => u.Username.Equals(username));
+            
 
             ViewBag.NameOfUser = loggedInUser.Name;
             
-            ViewBag.UserName = loggedInUser.Username;
 
 
             IQueryable < RecipeGroup > recipes =
@@ -72,7 +71,7 @@ namespace RecipeApplication.Controllers
                 }
                 catch (InvalidOperationException)
                 {
-                    System.Diagnostics.Debug.WriteLine(recipe.RecipeName);
+                    //System.Diagnostics.Debug.WriteLine(recipe.RecipeName);
                     cost = 0.00M;
                 }
                 
@@ -89,7 +88,7 @@ namespace RecipeApplication.Controllers
 
 
             return View(finalRecipes.ToList());
-            //return View(recipes.ToList());
+            
         }
 
         // GET: Users/Details/5
@@ -131,12 +130,13 @@ namespace RecipeApplication.Controllers
         }
 
         // GET: Users/Edit/5
-        public ActionResult Edit(string username)
+        public ActionResult Edit()
         {
-            ViewBag.Username = username;
+            string username = this.Session["Username"] as string;
+            
             if (string.IsNullOrEmpty(username))
             {
-                return RedirectToAction("Index", "Users", new { username = username });
+                return RedirectToAction("Index", "Users");
             }
             int id = db.Users.Where(u => u.Username.Equals(username)).Single().UserId;
             
@@ -160,7 +160,7 @@ namespace RecipeApplication.Controllers
             {
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index","Users",new { username = user.Username });
+                return RedirectToAction("Index","Users");
             }
             return View(user);
         }
