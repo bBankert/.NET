@@ -1,0 +1,26 @@
+﻿@Styles.Render("~/Content/css")
+@{
+    Layout = null;
+}
+
+    <div class="center-div">
+        <h1>Welcome to Brandon's Ticket System</h1>
+
+        <h2>Please Login</h2>
+        <hr />
+
+        @using (@Html.BeginForm())
+        {
+            @Html.Label("username", "Username")
+            @Html.TextBox("username", null, new { type = "text", required = "required", @class="form-control",placeholder="Username"})
+            @Html.Label("password", "Password")
+            @Html.TextBox("password", null, new { type = "password", required = "required" , @class="form-control",placeholder="Password"})
+            <input type="submit" value="Login" class="btn btn-primary"/>
+        }
+
+        @if (ViewBag.Error != null)
+        {
+            <p class="error"><strong>@ViewBag.Error</strong></p>
+        }
+
+    </div>
