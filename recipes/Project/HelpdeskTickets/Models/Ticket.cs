@@ -19,17 +19,17 @@ namespace HelpdeskTickets.Models
 
         public Progress Progress { get; set; } = Progress.NotStarted;
 
-        public User Creator { get; set; }
-        public User Owner { get; set; }
+        public virtual User Creator { get; set; }
+        public virtual User Owner { get; set; }
     }
 
     public enum Progress
     {
-        [Display(Description ="Not Started")]
+        [Display(Name ="Not Started")]
         NotStarted = 1,
-        [Description("In Progress")]
+        [Display(Name ="In Progress")]
         InProgress = 2,
-        [Description("Complete")]
+        [Display(Name ="Complete")]
         Complete = 3
     }
 }

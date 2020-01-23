@@ -47,13 +47,17 @@ namespace HelpdeskTickets.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TicketId,Title,Description,Progress")] Ticket ticket)
+        public ActionResult Create([Bind(Include = "TicketId,Title,Description,Progress,Creator")] Ticket ticket)
         {
             if (ModelState.IsValid)
             {
+                User user = this.Session["user"] as User;
+                ticket.Creator = db.Users.Single(u => u.UserId == user.UserId);
+                
                 db.Tickets.Add(ticket);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                
+                return RedirectToAction("Index","Users");
             }
 
             return View(ticket);
@@ -66,12 +70,45 @@ namespace HelpdeskTickets.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Ticket ticket = db.Tickets.Find(id);
-            if (ticket == null)
+            try
             {
-                return HttpNotFound();
+                Ticket ticket = db.Tickets.Find(id);
+                User user = this.Session["user"] as User;
+                ViewBag.permission = user.Permission;
+                //get the users who are staff members
+                var staffMembers = from usr in db.Users
+                                   where usr.Permission == Permission.Staff
+                                   select usr;
+                //make a select list
+                List<SelectListItem> items = new List<SelectListItem>();
+                foreach(var staffMember in staffMembers)
+                {
+                    //default
+                    if(items.Count() == 0)
+                    {
+                        SelectListItem item = new SelectListItem() { Text = staffMember.Name, Value = (staffMember.UserId).ToString(),Selected = true };
+                        items.Add(item);
+                    }
+                    else
+                    {
+                        SelectListItem item = new SelectListItem() { Text = staffMember.Name, Value = (staffMember.UserId).ToString() };
+                        items.Add(item);
+                    }
+                    
+                }
+                ViewBag.Owner = items;
+                if (ticket == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(ticket);
             }
-            return View(ticket);
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            
+            
         }
 
         // POST: Tickets/Edit/5
@@ -81,11 +118,20 @@ namespace HelpdeskTickets.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "TicketId,Title,Description,Progress")] Ticket ticket)
         {
+            //System.Diagnostics.Debug.WriteLine(ticket.Owner.Name);
             if (ModelState.IsValid)
             {
+                int OwnerId = Int32.Parse(Request.Form["Owner"]);
+                User user = db.Users.Single(u => u.UserId == OwnerId);
+                
+                
                 db.Entry(ticket).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                ticket.Owner = user;
+                db.Entry(ticket).State = EntityState.Modified;
+                db.SaveChanges();
+                
+                return RedirectToAction("Index","Users");
             }
             return View(ticket);
         }

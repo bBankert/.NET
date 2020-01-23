@@ -28,11 +28,24 @@ namespace HelpdeskTickets.Controllers
             {
                 User user = this.Session["user"] as User;
                 //System.Diagnostics.Debug.WriteLine(user.Name);
-                var tickets = from ticket in db.Tickets
-                              join u in db.Users on ticket.Owner.UserId equals u.UserId
-                              where user.UserId == u.UserId
-                              select ticket;
-                return View(tickets.ToList());
+                //if user, only show tickets they created
+                if (user.Permission.Equals(1))
+                {
+                    var tickets = from ticket in db.Tickets
+                                  where user.UserId == ticket.Creator.UserId
+                                  select ticket;
+                    return View(tickets.ToList());
+                }
+                //if staff (IT), show tickets they created or have been assigned to them
+                else
+                {
+
+                    var tickets = from ticket in db.Tickets
+                                  where user.UserId == ticket.Creator.UserId || user.UserId == ticket.Owner.UserId
+                                  select ticket;
+                    return View(tickets.ToList());
+                }
+                
             }
             catch (Exception)
             {
