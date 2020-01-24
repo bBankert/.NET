@@ -24,13 +24,20 @@ namespace HelpdeskTickets.Controllers
         // GET: Users
         public ActionResult Index()
         {
+            
             try
             {
                 User user = this.Session["user"] as User;
+
+                db.Tickets
+                .Include(t => t.Creator)
+                .Include(t => t.Owner);
+                
                 //System.Diagnostics.Debug.WriteLine(user.Name);
                 //if user, only show tickets they created
                 if (user.Permission.Equals(1))
                 {
+
                     var tickets = from ticket in db.Tickets
                                   where user.UserId == ticket.Creator.UserId
                                   select ticket;
@@ -45,6 +52,7 @@ namespace HelpdeskTickets.Controllers
                                   select ticket;
                     return View(tickets.ToList());
                 }
+
                 
             }
             catch (Exception)

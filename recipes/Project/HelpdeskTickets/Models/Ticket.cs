@@ -19,7 +19,10 @@ namespace HelpdeskTickets.Models
 
         public Progress Progress { get; set; } = Progress.NotStarted;
 
+        public int CreatorId { get; set; }
         public virtual User Creator { get; set; }
+
+        public int OwnerId { get; set; }
         public virtual User Owner { get; set; }
     }
 

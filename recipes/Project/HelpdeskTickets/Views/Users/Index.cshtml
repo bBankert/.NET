@@ -1,6 +1,5 @@
 ﻿@model IEnumerable<HelpdeskTickets.Models.Ticket>
 
-
 <div class="top-bar">
     <h2>My Tickets</h2>
     @Html.ActionLink("Create a Ticket", "Create", "Tickets", null, new { @class = "btn btn-primary " })
@@ -23,48 +22,49 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Title)
-    </td>
-    <td>
-        @{
-            switch (item.Progress)
-            {
-                case HelpdeskTickets.Models.Progress.NotStarted:
-                    <p class="badge badge-secondary">Not Started</p>
-                    break;
-                case HelpdeskTickets.Models.Progress.InProgress:
-                    <p class="badge badge-primary">In Progress</p>
-                    break;
-                case HelpdeskTickets.Models.Progress.Complete:
-                    <p class="badge badge-success">Complete</p>
-                    break;
-            }
-        }
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Creator.Name)
-    </td>
-    <td>
-        @{ 
-            if(item.Owner == null)
-            {
-                <p class="badge badge-secondary">Unassigned</p>
-            }
-            else
-            {
-                @Html.DisplayFor(modelItem => item.Owner.Name)
-            }
-        }
-    </td>
-    <td>
-        @Html.ActionLink("Edit", "Edit", "Tickets", new { id = item.TicketId }, null) |
-        @Html.ActionLink("Details", "Details", "Tickets", new { id = item.TicketId }, null) |
-        @Html.ActionLink("Delete", "Delete", "Tickets", new { id = item.TicketId }, null)
-    </td>
-</tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td class="dynamic-table-text">
+                @{
+                    switch (item.Progress)
+                    {
+                        case HelpdeskTickets.Models.Progress.NotStarted:
+                            <p class="badge badge-secondary">Not Started</p>
+                            break;
+                        case HelpdeskTickets.Models.Progress.InProgress:
+                            <p class="badge badge-primary">In Progress</p>
+                            break;
+                        case HelpdeskTickets.Models.Progress.Complete:
+                            <p class="badge badge-success">Complete</p>
+                            break;
+                    }
+                }
+            </td>
+            <td class="dynamic-table-text">
+                @Html.DisplayFor(modelItem => item.Creator.Name)
+            </td>
+            <td class="dynamic-table-text">
+                @{
+                    if (item.Owner == null)
+                    {
+                        <p class="badge badge-secondary">Unassigned</p>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.Owner.Name)
+                    }
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", "Tickets", new { id = item.TicketId }, new { @class = "btn btn-primary" })
+                @Html.ActionLink("Details", "Details", "Tickets", new { id = item.TicketId }, new { @class = "btn btn-primary" })
+                @Html.ActionLink("Delete", "Delete", "Tickets", new { id = item.TicketId }, new { @class = "btn btn-primary" })
+            </td>
+        </tr>
+    }
 
 </table>

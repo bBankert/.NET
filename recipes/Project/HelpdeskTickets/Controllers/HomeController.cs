@@ -13,6 +13,8 @@ namespace HelpdeskTickets.Controllers
         private SystemContext db = new SystemContext();
         public ActionResult Index(string username,string password)
         {
+            //empties user session data
+            Session.Remove("user");
             if(!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
                 try

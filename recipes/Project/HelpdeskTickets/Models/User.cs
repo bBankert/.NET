@@ -18,7 +18,9 @@ namespace HelpdeskTickets.Models
         public string Password { get; set; }
         public Permission Permission { get; set; }
 
-        public virtual ICollection<Ticket> Tickets { get; set; }
+        
+        public virtual ICollection<Ticket> TicketsCreated { get; set; }
+        public virtual ICollection<Ticket> TicketsOwned { get; set; }
 
     }
 

@@ -118,17 +118,17 @@ namespace HelpdeskTickets.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "TicketId,Title,Description,Progress")] Ticket ticket)
         {
-            //System.Diagnostics.Debug.WriteLine(ticket.Owner.Name);
+            //System.Diagnostics.Debug.WriteLine(Request.Form);
             if (ModelState.IsValid)
             {
-                int OwnerId = Int32.Parse(Request.Form["Owner"]);
-                User user = db.Users.Single(u => u.UserId == OwnerId);
-                
-                
-                db.Entry(ticket).State = EntityState.Modified;
-                db.SaveChanges();
-                ticket.Owner = user;
-                db.Entry(ticket).State = EntityState.Modified;
+                if (!string.IsNullOrEmpty(Request.Form["owner"]))
+                {
+                    int OwnerId = Int32.Parse(Request.Form["Owner"]);
+                    User user = db.Users.Single(u => u.UserId == OwnerId);
+                    var ticketToUpdate = db.Tickets.Find(ticket.TicketId);
+                    ticketToUpdate.Owner = user;
+                    
+                }
                 db.SaveChanges();
                 
                 return RedirectToAction("Index","Users");
